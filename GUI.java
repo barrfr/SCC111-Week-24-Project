@@ -12,9 +12,11 @@ public class GUI extends JFrame {
     private JPanel boardPanel;
 
     private ImageIcon emptyIcon;
+    private ImageIcon treeIcon;
     private ImageIcon BheadIcon;
     private ImageIcon bodyIcon;
     private ImageIcon middleIcon;
+    private ImageIcon BmanIcon;
 
     public GUI(Model model){
         this.model = model;
@@ -43,9 +45,12 @@ public class GUI extends JFrame {
 
     private void loadImages(){
         emptyIcon = resizeIcon("hole.png");
+        treeIcon = resizeIcon("tree.png");
         BheadIcon = resizeIcon("head_blue.png");
         bodyIcon = resizeIcon("snowball_large.png");
         middleIcon = resizeIcon("snowball_small.png");
+        BmanIcon = resizeIcon("snowman_blue.png");
+
 
     }
 
@@ -55,6 +60,10 @@ public class GUI extends JFrame {
         Image scaledImage = originalIcon.getImage().getScaledInstance(TILE_SIZE, TILE_SIZE, Image.SCALE_SMOOTH);
 
         return new ImageIcon(scaledImage);
+    }
+
+    public void renderGameFinish(boolean game_won){
+
     }
 
     public void renderBoard(String[][] board){
@@ -94,15 +103,33 @@ public class GUI extends JFrame {
         button.setContentAreaFilled(false);
         button.setFocusPainted(false);
 
+        button.addActionListener(e -> {
+            onTileClicked(row, col);
+        });
+
         return button;
     }
 
     private ImageIcon getIconForTile(String tile){
+        if(tile.equals("t")){
+            return treeIcon;
+        }
+
         if(tile.equals("HB")){
             return BheadIcon;
+        }
+
+        if(tile.equals("SB")){
+            return BmanIcon;
         }
 
         return emptyIcon;
     }
 
+    private void onTileClicked(int row, int col){
+        System.out.println("Click");
+        if (controller != null){
+            controller.handleTileClicked(row, col);
+        }
+    }
 }
